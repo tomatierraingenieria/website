@@ -1,0 +1,26 @@
+name = "tomatierra"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+type = "javascript"
+
+# Production environment
+[env.production]
+name = "tomatierra-production"
+
+# Routes for production domain
+[[env.production.routes]]
+pattern = "https://tomatierra.com/*"
+zone_name = "tomatierra.com"
+
+[[env.production.routes]]
+pattern = "https://www.tomatierra.com/*"
+zone_name = "tomatierra.com"
+
+# Caching strategy
+[env.production.kv_namespaces]
+
+# Build configuration
+[build]
+command = "npm run build"
+cwd = "./"
+watch_paths = ["src/**/*.astro", "src/**/*.css"]

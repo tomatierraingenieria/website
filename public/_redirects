@@ -1,0 +1,35 @@
+/* /index.html 200
+  Cache-Control: public, max-age=3600, s-maxage=86400
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+
+# Cache static assets for a long time
+/favicon.ico 200
+  Cache-Control: public, max-age=31536000, immutable
+
+# Cache CSS, JS, images
+/*.css 200
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.js 200
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/* 200
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2 200
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML pages - no cache
+/index.html 200
+  Cache-Control: public, max-age=3600, s-maxage=86400
+
+# Redirects
+/es/* https://tomatierra.com/:splat 301
+http://tomatierra.com/* https://tomatierra.com/:splat 301
+http://www.tomatierra.com/* https://tomatierra.com/:splat 301
+https://www.tomatierra.com/* https://tomatierra.com/:splat 301

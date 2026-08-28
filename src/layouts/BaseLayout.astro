@@ -1,0 +1,179 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Certificados Energéticos y CAE en Galicia | Tomatierra Ingeniería',
+  description =
+    'Tomatierra Ingeniería: especialistas en certificados energéticos y CAE (Certificados de Ahorro Energético) en Galicia. Servicios para viviendas, industria y transporte, incluyendo proyectos de instalación eléctrica para vehículos eléctricos.',
+  image = '/og-image.png',
+} = Astro.props;
+
+const siteBase = Astro.site ?? 'https://tomatierra.es';
+const canonicalURL = new URL(Astro.url.pathname, siteBase);
+const ogImageURL = new URL(image, siteBase);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': 'https://tomatierra.es/#website',
+      url: 'https://tomatierra.es',
+      name: 'Tomatierra Ingeniería',
+      description: 'Certificados energéticos y CAE en Galicia',
+      inLanguage: 'es-ES',
+    },
+    {
+      '@type': 'Organization',
+      '@id': 'https://tomatierra.es/#organization',
+      name: 'Tomatierra Ingeniería',
+      url: 'https://tomatierra.es',
+      email: 'hola@tomatierra.es',
+      logo: 'https://tomatierra.es/favicon.svg',
+      foundingDate: '2026',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Vigo',
+        addressRegion: 'Galicia',
+        addressCountry: 'ES',
+      },
+    },
+    {
+      '@type': 'ProfessionalService',
+      '@id': 'https://tomatierra.es/#service',
+      name: 'Tomatierra Ingeniería',
+      alternateName: 'Tomatierra',
+      description:
+        'Ingeniería especializada en certificados energéticos y Certificados de Ahorro Energético (CAE) para viviendas e industria en Galicia. Proyectos de instalación eléctrica para vehículos eléctricos y certificación para desclasificación de garajes.',
+      url: 'https://tomatierra.es',
+      email: 'hola@tomatierra.es',
+      areaServed: [
+        { '@type': 'State', name: 'Galicia', addressCountry: 'ES' },
+      ],
+      knowsAbout: [
+        'Certificados Energéticos',
+        'CAE - Certificados de Ahorro Energético',
+        'Auditoría Energética de Viviendas',
+        'Diagnóstico Energético Industrial',
+        'Eficiencia Energética',
+        'Vehículos Eléctricos',
+        'Instalaciones Eléctricas para Recarga de Vehículos Eléctricos',
+        'Desclasificación de Garajes para Vehículos Eléctricos',
+        'Certificación Energética Galicia',
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Servicios de Certificación Energética y Eficiencia',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Certificado Energético de Vivienda',
+              description:
+                'Certificados energéticos y CAE (Certificados de Ahorro Energético) para viviendas residenciales en Galicia. Auditorías y mejoras de eficiencia.',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Auditoría Energética Industrial y CAE',
+              description:
+                'Diagnóstico energético y Certificados de Ahorro Energético (CAE) para plantas y procesos industriales. Ahorro real y cumplimiento normativo.',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Instalación Eléctrica para Vehículos Eléctricos',
+              description:
+                'Proyectos de instalación eléctrica para recarga de vehículos eléctricos y certificación para la desclasificación de garajes conforme a normativa vigente.',
+            },
+          },
+        ],
+      },
+    },
+  ],
+};
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="es" href={canonicalURL} />
+    <link rel="alternate" hreflang="x-default" href={canonicalURL} />
+
+    <!-- Crawling -->
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+
+    <!-- Language & Location signals -->
+    <meta name="language" content="es" />
+    <meta name="geo.region" content="ES-GA" />
+    <meta name="geo.placename" content="Galicia, España" />
+    <meta name="author" content="Tomatierra Ingeniería" />
+
+    <!-- Open Graph (social + AI crawlers) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Tomatierra Ingeniería" />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+
+    <!-- Icons & theme -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#2D5F3F" />
+
+    <!-- Fonts (preconnect first, then non-render-blocking load) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      />
+    </noscript>
+
+    <!-- Structured data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </head>
+  <body>
+    <div class="contours" aria-hidden="true"></div>
+    <div class="wrap">
+      <slot />
+    </div>
+  </body>
+</html>

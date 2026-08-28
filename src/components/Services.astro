@@ -1,0 +1,45 @@
+---
+const services = [
+  {
+    title: 'Viviendas',
+    description:
+      'Certificados energéticos y CAE (Certificados de Ahorro Energético), auditorías y mejoras de eficiencia para que tu casa gaste lo justo y necesario.',
+    iconPath: `<path d="M3 12 L12 4 L21 12" /><path d="M6 10 V20 H18 V10" /><path d="M10 20 V14 H14 V20" />`,
+  },
+  {
+    title: 'Industria',
+    description:
+      'Diagnóstico energético y CAE (Certificados de Ahorro Energético) de plantas y procesos, con foco en ahorro real y cumplimiento normativo.',
+    iconPath: `<path d="M3 21 H21" /><path d="M5 21 V10 L10 13 V10 L15 13 V10 L19 13 V21" /><path d="M9 21 V17 H12 V21" />`,
+  },
+  {
+    title: 'Transporte',
+    description:
+      'Análisis de eficiencia de flotas y vehículos eléctricos. Certificación para desclasificación de garajes y proyectos de instalación eléctrica.',
+    iconPath: `<path d="M3 16 H15 V7 H6 L3 11 Z" /><circle cx="7" cy="18" r="2" /><circle cx="16" cy="18" r="2" /><path d="M15 10 H19 L21 13 V16 H15" />`,
+  },
+];
+---
+<section>
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">Lo que hacemos hoy</span>
+      <h2>Certificación energética, con chispa</h2>
+    </div>
+    <p>
+      Estudiamos cómo consume tu edificio, vehículo o instalación, y te damos un plan claro
+      para que gaste menos y contamine menos. Tres frentes, un mismo objetivo: que el
+      medioambiente nos lo agradezca.
+    </p>
+  </div>
+
+  <div class="cards">
+    {services.map((service) => (
+      <div class="card">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" set:html={service.iconPath} />
+        <h3>{service.title}</h3>
+        <p>{service.description}</p>
+      </div>
+    ))}
+  </div>
+</section>
