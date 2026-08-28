@@ -1,7 +1,5 @@
 name = "tomatierra"
-main = "src/index.ts"
 compatibility_date = "2025-01-01"
-type = "javascript"
 
 # Production environment
 [env.production]
@@ -19,8 +17,5 @@ zone_name = "tomatierra.com"
 # Caching strategy
 [env.production.kv_namespaces]
 
-# Build configuration
-[build]
-command = "npm run build"
-cwd = "./"
-watch_paths = ["src/**/*.astro", "src/**/*.css"]
+[assets]
+directory = "./dist"
