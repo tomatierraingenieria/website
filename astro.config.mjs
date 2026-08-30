@@ -3,7 +3,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://tomatierra.com',
+  site: 'https://tomatierraingenieria.com',
   compressHTML: true,
   integrations: [sitemap()],
 });

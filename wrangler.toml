@@ -7,12 +7,12 @@ name = "tomatierra-production"
 
 # Routes for production domain
 [[env.production.routes]]
-pattern = "https://tomatierra.com/*"
-zone_name = "tomatierra.com"
+pattern = "https://tomatierraingenieria.com/*"
+zone_name = "tomatierraingenieria.com"
 
 [[env.production.routes]]
-pattern = "https://www.tomatierra.com/*"
-zone_name = "tomatierra.com"
+pattern = "https://www.tomatierraingenieria.com/*"
+zone_name = "tomatierraingenieria.com"
 
 # Caching strategy
 [env.production.kv_namespaces]

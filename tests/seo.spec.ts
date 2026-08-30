@@ -18,7 +18,7 @@ test.describe('SEO meta tags', () => {
 
   test('canonical URL is set', async ({ page }) => {
     const canonical = page.locator('link[rel="canonical"]');
-    await expect(canonical).toHaveAttribute('href', 'https://tomatierra.com/');
+    await expect(canonical).toHaveAttribute('href', 'https://tomatierraingenieria.com/');
   });
 
   test('hreflang es and x-default are present', async ({ page }) => {

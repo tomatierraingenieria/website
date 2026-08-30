@@ -54,7 +54,7 @@ Hay dos suites:
 La carpeta `dist/` generada por `npm run build` está optimizada para Cloudflare Pages.
 
 ### Configuración del sitio
-- **Dominio:** https://tomatierra.com
+- **Dominio:** https://tomatierraingenieria.com
 - **Redirecciones:** HTTP → HTTPS, www → dominio canónico
 - **Build:** `npm run build` → `dist/`
 - **Versión Node.js:** 20+
@@ -93,4 +93,4 @@ npm run preview # Previsualizar localmente
 
 ## Contacto
 
-hola@tomatierra.es · Galicia, España
+hola@tomatierraingenieria.com · Galicia, España

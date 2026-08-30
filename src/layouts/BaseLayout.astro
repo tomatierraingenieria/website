@@ -10,11 +10,11 @@ interface Props {
 const {
   title = 'Certificados Energéticos y CAE en Galicia | Tomatierra Ingeniería',
   description =
-    'Tomatierra Ingeniería: especialistas en certificados energéticos y CAE (Certificados de Ahorro Energético) en Galicia. Servicios para viviendas, industria y transporte, incluyendo proyectos de instalación eléctrica para vehículos eléctricos.',
+    'Tomatierra Ingeniería: especialistas en certificados energéticos y CAE (Certificados de Ahorro Energético) en Galicia. Servicios para viviendas, industria y transporte, incluyendo proyectos de puntos de recarga para vehículos eléctricos.',
   image = '/og-image.png',
 } = Astro.props;
 
-const siteBase = Astro.site ?? 'https://tomatierra.es';
+const siteBase = Astro.site ?? 'https://tomatierraingenieria.com';
 const canonicalURL = new URL(Astro.url.pathname, siteBase);
 const ogImageURL = new URL(image, siteBase);
 
@@ -23,36 +23,36 @@ const structuredData = {
   '@graph': [
     {
       '@type': 'WebSite',
-      '@id': 'https://tomatierra.es/#website',
-      url: 'https://tomatierra.es',
+      '@id': 'https://tomatierraingenieria.com/#website',
+      url: 'https://tomatierraingenieria.com',
       name: 'Tomatierra Ingeniería',
       description: 'Certificados energéticos y CAE en Galicia',
       inLanguage: 'es-ES',
     },
     {
       '@type': 'Organization',
-      '@id': 'https://tomatierra.es/#organization',
+      '@id': 'https://tomatierraingenieria.com/#organization',
       name: 'Tomatierra Ingeniería',
-      url: 'https://tomatierra.es',
-      email: 'hola@tomatierra.es',
-      logo: 'https://tomatierra.es/favicon.svg',
+      url: 'https://tomatierraingenieria.com',
+      email: 'hola@tomatierraingenieria.com',
+      logo: 'https://tomatierraingenieria.com/favicon.svg',
       foundingDate: '2026',
       address: {
         '@type': 'PostalAddress',
-        addressLocality: 'Vigo',
+        addressLocality: 'Coruña',
         addressRegion: 'Galicia',
         addressCountry: 'ES',
       },
     },
     {
       '@type': 'ProfessionalService',
-      '@id': 'https://tomatierra.es/#service',
+      '@id': 'https://tomatierraingenieria.com/#service',
       name: 'Tomatierra Ingeniería',
       alternateName: 'Tomatierra',
       description:
-        'Ingeniería especializada en certificados energéticos y Certificados de Ahorro Energético (CAE) para viviendas e industria en Galicia. Proyectos de instalación eléctrica para vehículos eléctricos y certificación para desclasificación de garajes.',
-      url: 'https://tomatierra.es',
-      email: 'hola@tomatierra.es',
+        'Ingeniería especializada en certificados energéticos y Certificados de Ahorro Energético (CAE) para viviendas e industria en Galicia. Proyectos de puntos de recarga para vehículos eléctricos y certificación para desclasificación de garajes.',
+      url: 'https://tomatierraingenieria.com',
+      email: 'hola@tomatierraingenieria.com',
       areaServed: [
         { '@type': 'State', name: 'Galicia', addressCountry: 'ES' },
       ],

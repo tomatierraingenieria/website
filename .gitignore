@@ -24,11 +24,15 @@ pnpm-debug.log*
 # Windows
 Thumbs.db
 
-# Playwright
-test-results/
-playwright-report/
-.playwright/
-.playwright-mcp/
+# Playwright / test artifacts
+**/test-results/
+**/playwright-report/
+**/.playwright/
+**/.playwright-mcp/
+**/coverage/
+**/.nyc_output/
+**/*.trace
+**/*.zip
 
 # Editor
 .vscode/settings.json

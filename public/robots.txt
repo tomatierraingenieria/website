@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /dist/
 
-Sitemap: https://tomatierra.es/sitemap-index.xml
+Sitemap: https://tomatierraingenieria.com/sitemap-index.xml
