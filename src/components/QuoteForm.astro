@@ -1,0 +1,99 @@
+---
+// Formulario de presupuesto. Sin backend: src/scripts/quote-form.ts valida en cliente y abre un mailto
+// con los datos; el mensaje posterior no afirma que se envió y ofrece «Copiar solicitud».
+// Para Formspree (o un Cloudflare Worker), añade al <form> el action y el method y quita el
+// preventDefault de quote-form.ts (o haz fetch y muestra el éxito real):
+//   action="https://formspree.io/f/XXXX" method="post"
+// Contratos con el JS: [data-quote-form], #servicio, #<campo>-error, [data-form-status],
+// [data-copy-request] y [data-copy-status].
+const EMAIL = 'hola@tomatierraingenieria.com';
+
+const services = [
+  { value: '', label: 'Elige un servicio' },
+  { value: 'viviendas', label: 'Certificado energético de vivienda' },
+  { value: 'industria-cae', label: 'Industria: auditoría y CAE' },
+  { value: 'movilidad', label: 'Recarga de VE o desclasificación de garaje' },
+  { value: 'otro', label: 'Otra consulta' },
+];
+---
+<section id="presupuesto" class="focus-scope-light bg-forest py-20 text-paper lg:py-28" aria-labelledby="form-title">
+  <div class="container-page grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+    <div>
+      <p class="font-mono text-sm text-copper-light">Presupuesto sin compromiso</p>
+      <h2 id="form-title" class="mt-3 font-display text-4xl leading-tight font-semibold text-balance sm:text-5xl">
+        Cuéntanos qué necesitas y te enviamos <em class="font-normal">el presupuesto</em>
+      </h2>
+      <p class="mt-5 text-lg leading-relaxed text-paper/85">
+        Con estos datos ya podemos calcularlo. Si prefieres, escríbenos directamente a
+        <a class="link-light" href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+      </p>
+    </div>
+
+    <form class="grid gap-5 sm:grid-cols-2" novalidate data-quote-form>
+      <div>
+        <label class="field-label" for="nombre">Nombre</label>
+        <input class="field" id="nombre" name="nombre" type="text" autocomplete="name" required aria-describedby="nombre-error" />
+        <p class="field-error" id="nombre-error"></p>
+      </div>
+      <div>
+        <label class="field-label" for="email">Email</label>
+        <input class="field" id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error" />
+        <p class="field-error" id="email-error"></p>
+      </div>
+      <div>
+        <label class="field-label" for="telefono">Teléfono <span class="font-normal text-paper/75">(opcional)</span></label>
+        <input class="field" id="telefono" name="telefono" type="tel" autocomplete="tel" />
+      </div>
+      <div>
+        <label class="field-label" for="municipio">Municipio</label>
+        <input
+          class="field"
+          id="municipio"
+          name="municipio"
+          type="text"
+          autocomplete="address-level2"
+          required
+          aria-describedby="municipio-error"
+        />
+        <p class="field-error" id="municipio-error"></p>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="field-label" for="servicio">Servicio</label>
+        <select class="field" id="servicio" name="servicio" required aria-describedby="servicio-error">
+          {services.map((service) => <option value={service.value}>{service.label}</option>)}
+        </select>
+        <p class="field-error" id="servicio-error"></p>
+      </div>
+      <div class="sm:col-span-2">
+        <label class="field-label" for="mensaje">Mensaje</label>
+        <textarea
+          class="field min-h-32"
+          id="mensaje"
+          name="mensaje"
+          rows="4"
+          placeholder="Tipo de inmueble, superficie aproximada, para qué lo necesitas…"
+          required
+          aria-describedby="mensaje-error"
+        ></textarea>
+        <p class="field-error" id="mensaje-error"></p>
+      </div>
+      <div class="sm:col-span-2">
+        <div class="flex gap-3">
+          <input class="checkbox" id="rgpd" name="rgpd" type="checkbox" required aria-describedby="rgpd-error" />
+          <label class="text-sm leading-relaxed text-paper/85" for="rgpd">
+            Acepto que Tomatierra Ingeniería use estos datos solo para responder a mi solicitud.
+          </label>
+        </div>
+        <p class="field-error" id="rgpd-error"></p>
+      </div>
+      <div class="grid gap-4 sm:col-span-2">
+        <div class="flex flex-wrap items-center gap-4">
+          <button type="submit" class="btn-primary">Pedir presupuesto</button>
+          <button type="button" class="btn-outline-light" data-copy-request hidden>Copiar solicitud</button>
+        </div>
+        <p class="text-sm leading-relaxed text-paper/85" role="status" data-form-status></p>
+        <p class="text-sm font-medium text-copper-light" role="status" data-copy-status></p>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,69 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../data/icons';
+
+// TODO: validar con el cliente los textos legales de los CAE (condiciones y «1 CAE = 1 kWh…»).
+const flow: { icon: IconName; label: string; hint: string }[] = [
+  { icon: 'tool', label: 'Actuación de eficiencia', hint: 'Caldera, aislamiento, iluminación…' },
+  { icon: 'zap', label: 'kWh ahorrados', hint: 'Energía final que ya no consumes' },
+  { icon: 'badge', label: 'CAE', hint: 'El ahorro, certificado' },
+  { icon: 'euro', label: 'Ingreso para ti', hint: 'Lo compran empresas obligadas' },
+];
+
+const conditions: { icon: IconName; before: string; strong: string }[] = [
+  { icon: 'sparkle', before: 'Viene de una', strong: 'actuación nueva' },
+  { icon: 'shield', before: 'Lo comprueba un', strong: 'verificador acreditado' },
+  { icon: 'pen', before: 'La cesión se', strong: 'firma antes de la obra' },
+];
+---
+<section class="py-20 lg:py-28" aria-labelledby="cae-title">
+  <div class="container-page">
+    <div class="reveal max-w-2xl">
+      <p class="eyebrow">CAE · Certificados de Ahorro Energético</p>
+      <h2 id="cae-title" class="section-title mt-3">Ahorrar energía también puede darte dinero</h2>
+      <p class="section-lead">El ahorro de tu mejora se certifica y se vende a empresas obligadas a ahorrar.</p>
+    </div>
+
+    {/* Diagrama animado: cada nodo aparece y una chispa recorre el conector hasta el siguiente.
+        Subgrid en lg: cada .cae-node es hijo directo de .cae-flow y .cae-text es contents. */}
+    <figure class="cae-panel reveal mt-10">
+      <ol class="cae-flow" data-play aria-label="De una mejora de eficiencia a un ingreso">
+        {flow.map((node, index) => (
+          <li class="cae-node">
+            <span class="cae-icon" aria-hidden="true"><Icon name={node.icon} class="size-7" /></span>
+            <span class="cae-text">
+              <span class="cae-label">{node.label}</span>
+              <span class="cae-hint">{node.hint}</span>
+            </span>
+            {index < flow.length - 1 && <span class="cae-link" aria-hidden="true"></span>}
+          </li>
+        ))}
+      </ol>
+      <figcaption class="mt-8 border-t border-paper/20 pt-5 font-mono text-sm text-copper-light">
+        1 CAE = 1 kWh de energía final ahorrada
+      </figcaption>
+    </figure>
+
+    {/* Condiciones + aviso en dos columnas solo desde xl: a 1024 la caja del CTA quedaba estrecha */}
+    <div class="mt-12 grid gap-10 xl:grid-cols-[1.5fr_1fr] xl:items-end xl:gap-16">
+      <div class="reveal">
+        <h3 class="block-title">Para que tu ahorro genere CAE</h3>
+        <ul class="mt-6 grid gap-6 sm:grid-cols-3" aria-label="Condiciones para que el ahorro genere CAE">
+          {conditions.map((condition) => (
+            <li class="feature sm:flex-col sm:gap-3">
+              <span class="icon-badge" aria-hidden="true"><Icon name={condition.icon} /></span>
+              <p class="feature-text">{condition.before} <strong class="text-ink">{condition.strong}</strong></p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal rounded-card border-2 border-copper-deep bg-paper p-6">
+        <p class="flex gap-3 font-semibold text-ink">
+          <Icon name="clock" class="text-copper-deep" />
+          Hazlo antes de empezar la obra: después ya no se puede.
+        </p>
+        <a href="#presupuesto" class="btn-primary btn-wrap mt-5 w-full sm:w-auto" data-service="industria-cae">¿Tu proyecto genera CAE? Consúltanos</a>
+      </div>
+    </div>
+  </div>
+</section>

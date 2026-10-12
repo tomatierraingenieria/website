@@ -1,35 +1,60 @@
 ---
+// Cabecera fija: logo-brote que se dibuja al cargar, menú hamburguesa hasta lg y CTA.
+// Contratos con src/scripts/menu.ts: [data-menu-toggle], #menu y su data-open.
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#como-trabajamos', label: 'Cómo trabajamos' },
+  { href: '#faq', label: 'Preguntas frecuentes' },
+];
+
+// Orden de dibujo del logo: barras → tallo → hojas (--d = retardo de cada trazo)
+const bars = [
+  { x1: 34, y1: 72, x2: 86, y2: 72, d: '0s' },
+  { x1: 42, y1: 84, x2: 78, y2: 84, d: '0.1s' },
+  { x1: 50, y1: 96, x2: 70, y2: 96, d: '0.2s' },
+];
 ---
-<header>
-  <div class="brand">
-    <svg
-      style="width:44px;height:44px"
-      viewBox="0 0 120 120"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
+<header class="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/95 backdrop-blur">
+  <div class="container-page flex h-16 items-center justify-between gap-4 md:h-18">
+    <a href="#inicio" class="flex items-center gap-2 rounded-lg" aria-label="Tomatierra Ingeniería, ir al inicio">
+      <svg class="logo-draw size-10 shrink-0" viewBox="0 0 120 120" aria-hidden="true">
+        <g fill="none" stroke-width="5" stroke-linecap="round">
+          {bars.map((bar) => (
+            <line pathLength="1" style={`stroke: var(--color-copper); --d: ${bar.d}`} x1={bar.x1} y1={bar.y1} x2={bar.x2} y2={bar.y2} />
+          ))}
+          <line pathLength="1" style="stroke: var(--color-forest); --d: 0.3s" x1="60" y1="62" x2="60" y2="30" />
+          <path pathLength="1" style="stroke: var(--color-moss); --d: 0.6s" d="M60 30 C 52 24, 46 26, 44 18" />
+          <path pathLength="1" style="stroke: var(--color-moss); --d: 0.6s" d="M60 30 C 68 24, 74 26, 76 18" />
+        </g>
+      </svg>
+      <span class="flex flex-col leading-none">
+        <span class="font-display text-xl font-semibold text-forest">tomatierra</span>
+        <span class="font-mono text-xs text-ink-soft">Ingeniería</span>
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="menu-toggle group"
+      aria-expanded="false"
+      aria-controls="menu"
+      aria-label="Abrir menú"
+      data-menu-toggle
     >
-      <path class="sprout" d="M60 30 C 52 24, 46 26, 44 18" />
-      <path class="sprout" d="M60 30 C 68 24, 74 26, 76 18" />
-      <line class="stem" x1="60" y1="30" x2="60" y2="62" />
-      <line class="bar bar1" x1="34" y1="72" x2="86" y2="72" />
-      <line class="bar bar2" x1="42" y1="84" x2="78" y2="84" />
-      <line class="bar bar3" x1="50" y1="96" x2="70" y2="96" />
-    </svg>
-    <div class="brand-text">
-      <span class="brand-name">tomatierra</span>
-      <span class="brand-sub">Ingeniería</span>
+      {/* Hamburguesa que pasa a X con aria-expanded="true" */}
+      <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path class="menu-icon-bars" d="M4 7h16M4 12h16M4 17h16" />
+        <path class="menu-icon-close" d="M6 6l12 12M18 6L6 18" />
+      </svg>
+    </button>
+
+    <div id="menu" data-open="false" class="menu-panel">
+      <nav aria-label="Principal">
+        <ul class="flex flex-col gap-1 lg:flex-row lg:gap-7">
+          {links.map((link) => <li><a class="nav-link" href={link.href}>{link.label}</a></li>)}
+        </ul>
+      </nav>
+      <a href="#presupuesto" class="btn-primary mt-3 w-full lg:mt-0 lg:w-auto">Pedir presupuesto</a>
     </div>
   </div>
-  <a class="btn btn-ghost" href="mailto:hola@tomatierraingenieria.com">Escríbenos</a>
 </header>
-
-<style>
-  svg path, svg line {
-    fill: none;
-    stroke-width: 4.5;
-    stroke-linecap: round;
-  }
-  .sprout { stroke: var(--moss); }
-  .stem   { stroke: var(--soil); }
-  .bar    { stroke: var(--copper-bright); }
-</style>

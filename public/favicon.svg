@@ -1,9 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <rect width="120" height="120" rx="24" fill="#2D5F3F"/>
-  <path d="M60 22 C 50 15, 42 17, 39 7" fill="none" stroke="#5CB85C" stroke-width="5" stroke-linecap="round"/>
-  <path d="M60 22 C 70 15, 78 17, 81 7" fill="none" stroke="#5CB85C" stroke-width="5" stroke-linecap="round"/>
-  <line x1="60" y1="22" x2="60" y2="62" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
-  <line x1="30" y1="72" x2="90" y2="72" stroke="#D4A017" stroke-width="5" stroke-linecap="round"/>
-  <line x1="40" y1="86" x2="80" y2="86" stroke="#D4A017" stroke-width="5" stroke-linecap="round"/>
-  <line x1="50" y1="100" x2="70" y2="100" stroke="#D4A017" stroke-width="5" stroke-linecap="round"/>
+  <!-- Favicon: archivo aparte, no puede leer los tokens CSS; colores = brief (musgo, bosque, cobre). Fondo transparente. -->
+  <g fill="none" stroke-width="7" stroke-linecap="round">
+    <path stroke="#5cb85c" d="M60 30 C 52 24, 46 26, 44 18"/>
+    <path stroke="#5cb85c" d="M60 30 C 68 24, 74 26, 76 18"/>
+    <line stroke="#1f4a33" x1="60" y1="30" x2="60" y2="62"/>
+    <line stroke="#c8901a" x1="34" y1="72" x2="86" y2="72"/>
+    <line stroke="#c8901a" x1="42" y1="84" x2="78" y2="84"/>
+    <line stroke="#c8901a" x1="50" y1="96" x2="70" y2="96"/>
+  </g>
 </svg>

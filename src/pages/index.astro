@@ -3,17 +3,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
 import Services from '../components/Services.astro';
-import Future from '../components/Future.astro';
+import Steps from '../components/Steps.astro';
+import Why from '../components/Why.astro';
+import Cae from '../components/Cae.astro';
+import Faq from '../components/Faq.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import StickyCta from '../components/StickyCta.astro';
 import Footer from '../components/Footer.astro';
 ---
-<BaseLayout>
+<BaseLayout
+  ogTitle="Tomatierra Ingeniería · Cuando la energía toca tierra, todo fluye"
+  ogDescription="Certificación energética, auditorías, CAE y recarga de vehículo eléctrico en Galicia. Un técnico de principio a fin y sin humo."
+>
   <Header />
-  <main>
+  <main id="contenido">
     <Hero />
-    <div class="divider"></div>
     <Services />
-    <Future />
+    <Steps />
+    <Why />
+    <Cae />
+    <Faq />
+    <QuoteForm />
   </main>
-  <div class="divider"></div>
+  <StickyCta />
   <Footer />
 </BaseLayout>

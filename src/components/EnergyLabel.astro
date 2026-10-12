@@ -1,0 +1,31 @@
+---
+// Etiqueta energética viva: src/scripts/energy-label.ts baja el indicador de G a A.
+// Contratos: [data-energy-pointer] y [data-energy-letter].
+const levels = [
+  { letter: 'A', bg: 'bg-energy-a', width: '40%' },
+  { letter: 'B', bg: 'bg-energy-b', width: '50%' },
+  { letter: 'C', bg: 'bg-energy-c', width: '60%' },
+  { letter: 'D', bg: 'bg-energy-d', width: '70%' },
+  { letter: 'E', bg: 'bg-energy-e', width: '80%' },
+  { letter: 'F', bg: 'bg-energy-f', width: '90%' },
+  { letter: 'G', bg: 'bg-energy-g', width: '100%' },
+];
+---
+<figcaption class="absolute bottom-0 left-4 w-64 rounded-card bg-paper p-4 shadow-label sm:left-6 sm:w-72 lg:bottom-8 lg:-left-10">
+  <p class="flex items-baseline justify-between font-mono text-xs text-ink-soft">
+    <span>Calificación energética</span>
+    <span class="sr-only">: clase A, la más eficiente.</span>
+  </p>
+  <div class="relative mt-3 flex gap-2" aria-hidden="true">
+    <ol class="grid flex-1 gap-1">
+      {levels.map((level) => <li class:list={['energy-bar', level.bg]} style={`--w: ${level.width}`}>{level.letter}</li>)}
+    </ol>
+    <div class="w-12 shrink-0">
+      <div class="energy-pointer flex h-6 items-center justify-end gap-1 font-mono text-sm font-bold text-paper sm:h-7" data-energy-pointer>
+        <span class="grid h-full w-10 place-items-center rounded-r-md bg-ink [clip-path:polygon(0.6rem_0,100%_0,100%_100%,0.6rem_100%,0_50%)]">
+          <span class="pl-1" data-energy-letter>A</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</figcaption>

@@ -1,15 +1,14 @@
 ---
+// Pie mínimo, como el original: logo mini + copyright.
+// El año se pinta en build (correcto sin JS) y src/scripts/year.ts lo actualiza vía data-year.
 const year = new Date().getFullYear();
 ---
-<footer>
-  <div class="brand-mini">
-    <svg width="20" height="20" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <line style="stroke:var(--copper-bright); stroke-width:6; stroke-linecap:round;" x1="30" y1="72" x2="90" y2="72" />
-      <line style="stroke:var(--copper-bright); stroke-width:6; stroke-linecap:round;" x1="40" y1="86" x2="80" y2="86" />
-      <line style="stroke:var(--copper-bright); stroke-width:6; stroke-linecap:round;" x1="50" y1="100" x2="70" y2="100" />
-      <line style="stroke:var(--soil); stroke-width:6; stroke-linecap:round;" x1="60" y1="30" x2="60" y2="62" />
-    </svg>
-    tomatierra
+<footer class="border-t border-ink/10 py-6">
+  <div class="container-page flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+    <p class="flex items-center gap-2 font-display text-lg font-semibold text-forest">
+      <svg class="size-7 shrink-0" aria-hidden="true" focusable="false"><use href="#logo" /></svg>
+      tomatierra
+    </p>
+    <p class="font-mono text-xs text-ink-soft">© <span data-year>{year}</span> Tomatierra Ingeniería — Galicia, España</p>
   </div>
-  <small>© {year} Tomatierra Ingeniería — Galicia, España</small>
 </footer>

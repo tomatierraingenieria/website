@@ -1,0 +1,13 @@
+---
+// Barra inferior fija (solo hasta lg). src/scripts/sticky-cta.ts la muestra cuando el CTA del hero
+// sale de pantalla y la oculta con el formulario a la vista o el menú abierto.
+// Va fuera de <main>. Empieza oculta e inerte para que no se pueda tabular hasta que aparece.
+---
+<div
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-paper/95 p-3 shadow-bar backdrop-blur transition-transform duration-300 data-[hidden=true]:translate-y-full motion-reduce:transition-none lg:hidden"
+  data-sticky-cta
+  data-hidden="true"
+  inert
+>
+  <a href="#presupuesto" class="btn-primary w-full">Pedir presupuesto</a>
+</div>

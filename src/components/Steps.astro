@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../data/icons';
+
+// TODO: confirmar con el cliente el paso 01 (¿presupuesto cerrado?).
+const steps: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'chat', title: 'Nos escribes', text: 'Por formulario o email. Presupuesto claro antes de empezar.' },
+  { icon: 'clipboard', title: 'Visita técnica', text: 'Medimos envolvente, instalaciones y equipos.' },
+  { icon: 'file-check', title: 'Informe y registro', text: 'Firmamos el certificado y lo presentamos en el registro de Galicia.' },
+  { icon: 'trend', title: 'Plan de mejora', text: 'Qué cambiar primero y si la mejora puede generar CAE.' },
+];
+---
+<section id="como-trabajamos" class="container-page py-20 lg:py-28" aria-labelledby="pasos-title">
+  <div class="reveal max-w-2xl">
+    <p class="eyebrow">Cómo trabajamos</p>
+    <h2 id="pasos-title" class="section-title mt-3">De tu mensaje al certificado registrado, en cuatro pasos</h2>
+  </div>
+
+  {/* La línea que une los pasos se dibuja al entrar en pantalla (reveal.ts añade .is-visible).
+      En escritorio cada .step es un subgrid: hijo directo de .steps, sin envoltorios. */}
+  <ol class="steps" data-play>
+    {steps.map((step, index) => (
+      <li class="step">
+        <span class="step-icon" aria-hidden="true"><Icon name={step.icon} /></span>
+        <div class="step-body">
+          <p class="step-num" aria-hidden="true">{String(index + 1).padStart(2, '0')}</p>
+          <h3 class="step-title">{step.title}</h3>
+          <p class="step-text">{step.text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

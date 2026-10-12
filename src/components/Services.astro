@@ -1,45 +1,79 @@
 ---
-const services = [
+import Icon from './Icon.astro';
+import type { IconName } from '../data/icons';
+import { housingPhoto, industryPhoto, evPhoto, type Photo } from '../data/images';
+
+interface Service {
+  title: string;
+  lead: string;
+  icon: IconName;
+  photo: Photo;
+  bullets: string[];
+}
+
+const services: Service[] = [
   {
     title: 'Viviendas',
-    description:
-      'Certificados energéticos y CAE (Certificados de Ahorro Energético), auditorías y mejoras de eficiencia para que tu casa gaste lo justo y necesario.',
-    iconPath: `<path d="M3 12 L12 4 L21 12" /><path d="M6 10 V20 H18 V10" /><path d="M10 20 V14 H14 V20" />`,
+    lead: 'El certificado para vender o alquilar, sin vueltas.',
+    icon: 'home',
+    photo: housingPhoto,
+    bullets: ['Visita y toma de datos', 'Certificado y etiqueta registrados', 'Mejoras ordenadas por ahorro'],
   },
   {
-    title: 'Industria',
-    description:
-      'Diagnóstico energético y CAE (Certificados de Ahorro Energético) de plantas y procesos, con foco en ahorro real y cumplimiento normativo.',
-    iconPath: `<path d="M3 21 H21" /><path d="M5 21 V10 L10 13 V10 L15 13 V10 L19 13 V21" /><path d="M9 21 V17 H12 V21" />`,
+    title: 'Industria y CAE',
+    lead: 'Dónde se va tu energía y cómo convertir el ahorro en ingreso.',
+    icon: 'factory',
+    photo: industryPhoto,
+    bullets: ['Auditorías de instalaciones y procesos', 'Medidas de ahorro justificadas', 'Tramitación de CAE'],
   },
   {
-    title: 'Transporte',
-    description:
-      'Análisis de eficiencia de flotas y vehículos eléctricos. Certificación para desclasificación de garajes y proyectos de instalación eléctrica.',
-    iconPath: `<path d="M3 16 H15 V7 H6 L3 11 Z" /><circle cx="7" cy="18" r="2" /><circle cx="16" cy="18" r="2" /><path d="M15 10 H19 L21 13 V16 H15" />`,
+    title: 'Movilidad eléctrica',
+    lead: 'Tu garaje cargando coches, con los papeles en regla.',
+    icon: 'plug',
+    photo: evPhoto,
+    bullets: [
+      'Proyecto de recarga en garajes comunitarios',
+      'Desclasificación de garajes',
+      'Documentación para comunidad y concello',
+    ],
   },
 ];
 ---
-<section>
-  <div class="section-head">
-    <div>
-      <span class="eyebrow">Lo que hacemos hoy</span>
-      <h2>Certificación energética, con chispa</h2>
+<section id="servicios" class="bg-mint py-20 lg:py-28" aria-labelledby="servicios-title">
+  <div class="container-page">
+    <div class="reveal max-w-2xl">
+      <p class="eyebrow">Servicios</p>
+      {/* «con chispa» va pegado al svg (sin espacios) para que el subrayado no se separe */}
+      <h2 id="servicios-title" class="section-title mt-3">
+        Certificación energética, <em class="spark-word">con chispa<svg class="spark-underline" viewBox="0 0 200 12" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M3 8 C 50 2, 130 2, 197 7" /></svg></em>
+      </h2>
+      <p class="section-lead">Elige lo tuyo. Si dudas, te decimos por dónde empezar.</p>
     </div>
-    <p>
-      Estudiamos cómo consume tu edificio, vehículo o instalación, y te damos un plan claro
-      para que gaste y contamine menos. Tres frentes, un mismo objetivo: que el
-      medioambiente nos lo agradezca.
-    </p>
-  </div>
 
-  <div class="cards">
-    {services.map((service) => (
-      <div class="card">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" set:html={service.iconPath} />
-        <h3>{service.title}</h3>
-        <p>{service.description}</p>
-      </div>
-    ))}
+    {/* Subgrid en lg: cada .service-card debe ser hijo directo de .service-grid (sin envoltorios) */}
+    <ul class="service-grid mt-12">
+      {services.map((service) => (
+        <li class="service-card group reveal">
+          <div class="photo-frame">
+            <img
+              class="service-img"
+              src={service.photo.src}
+              width={service.photo.width}
+              height={service.photo.height}
+              loading="lazy"
+              alt={service.photo.alt}
+            />
+          </div>
+          <div class="service-body">
+            <span class="icon-badge" aria-hidden="true"><Icon name={service.icon} /></span>
+            <h3 class="service-title">{service.title}</h3>
+            <p class="service-lead">{service.lead}</p>
+            <ul class="check-list mt-4">
+              {service.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>

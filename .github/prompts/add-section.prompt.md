@@ -1,5 +1,5 @@
 ---
-description: "Scaffold a new page section for the Tomatierra website. Creates the .astro component, wires it into index.astro, and places a divider."
+description: "Scaffold a new page section for the Tomatierra website. Creates the .astro component with Tailwind 4 classes and wires it into index.astro."
 argument-hint: "Section name and purpose, e.g. 'Testimonials — client quotes'"
 agent: agent
 ---
@@ -11,20 +11,22 @@ The user wants to add a new section. If no argument was provided, ask: **what is
 ## Steps
 
 1. **Create the component** at `src/components/<SectionName>.astro`.
-   - Use the standard layout: `.section-head` with `.eyebrow` + `h2`, then the section body.
-   - Use CSS custom properties from `global.css` for all colors and values.
-   - Write all styles in a scoped `<style>` block inside the component.
-   - All user-facing copy must be in Spanish (es-ES).
-   - Add `aria-hidden="true"` to any decorative SVGs.
+   - `<section>` with `aria-labelledby`, `.container-page`, and a heading block `.eyebrow` + `h2.section-title` (inside `.reveal` if it should fade in).
+   - Repeated items as a typed array in the frontmatter (or `src/data/*.ts`) rendered with `.map()`.
+   - Tailwind utilities with the `@theme` tokens; reuse the shared classes in `global.css`. If a new repeated piece is needed, add it to `@layer components` or `@utility` in `global.css` (no scoped `<style>`).
+   - Icons with `<Icon name="…" />`; photos only as base64 entries in `src/data/images.ts`.
+   - All user-facing copy in Spanish (es-ES). Notes/TODOs as frontmatter comments, never `<!-- -->`.
 
 2. **Wire it up** in `src/pages/index.astro`:
-   - Import the new component at the top of the frontmatter.
-   - Place it inside `<main>` in logical order relative to existing sections.
-   - Add `<div class="divider"></div>` before or after as appropriate.
+   - Import the component in the frontmatter.
+   - Place it inside `<main>` in logical order, alternating `bg-mint` and white backgrounds.
 
-3. **Confirm** by listing what was created and where it was placed.
+3. **Test**: add or update Playwright checks in `tests/`, then run `npm run build`, `npm run check` and `npm test`.
+
+4. **Confirm** by listing what was created and where it was placed.
 
 ## Reference components
-- [src/components/Services.astro](../../src/components/Services.astro) — card grid pattern
-- [src/components/Future.astro](../../src/components/Future.astro) — tag list pattern
-- [src/styles/global.css](../../src/styles/global.css) — all design tokens
+- [src/components/Services.astro](../../src/components/Services.astro) — card grid with photos (subgrid)
+- [src/components/Why.astro](../../src/components/Why.astro) — photo + feature list
+- [src/components/Faq.astro](../../src/components/Faq.astro) — data array rendered as `<details>`
+- [src/styles/global.css](../../src/styles/global.css) — design tokens and shared classes

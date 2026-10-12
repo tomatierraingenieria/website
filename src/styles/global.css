@@ -1,458 +1,744 @@
-:root {
-  --soil: #2D5F3F;
-  --soil-2: #3A7A52;
-  --soil-3: #4A9365;
-  --parchment: #FFFFFF;
-  --text-dark: #1A1A1A;
-  --copper: #B8860B;
-  --copper-bright: #D4A017;
-  --moss: #5CB85C;
-  --sand: #A9A47A;
-  --sand-dim: #888855;
-  --blue-accent: #4A90E2;
-  --radius: 22px;
+@import "tailwindcss";
+/* Tailwind solo escanea el código del sitio: ni las guías de agentes ni la documentación,
+   que citan clases de ejemplo y engordarían el CSS */
+@source not "../../.claude";
+@source not "../../.github";
+@source not "../../*.md";
+
+/* ------------------------------------------------------------------
+   Tokens · Blanco y verde, cobre solo como acento
+   ------------------------------------------------------------------ */
+@theme {
+  /* Superficies */
+  --color-paper: #ffffff; /* fondo principal y texto sobre bosque */
+  --color-mint: #eef5f0; /* secciones alternas */
+
+  /* Verdes (protagonistas) */
+  --color-forest: #1f4a33; /* títulos, formulario, insignias */
+  --color-forest-deep: #163826;
+  --color-pine: #2d5f3f; /* verde marca */
+  --color-leaf: #3a7a52; /* iconos y viñetas sobre claro */
+  --color-moss: #5cb85c; /* brote, nivel A, acentos vivos sobre bosque */
+
+  /* Cobre: solo acento (CTA principal, números, subrayados) */
+  --color-copper: #c8901a;
+  --color-copper-bright: #dba433;
+  --color-copper-deep: #8a5f0c; /* cobre legible como texto sobre claro */
+  --color-copper-light: #e6b75a; /* cobre legible sobre bosque */
+
+  /* Texto */
+  --color-ink: #1a1a1a;
+  --color-ink-soft: #46504a;
+
+  /* Estado de error: coral claro, pensado para leerse sobre bosque (≥4.5:1 texto, ≥3:1 borde) */
+  --color-danger: #ffb4a8;
+
+  /* Escala de la etiqueta energética (A = musgo de marca) */
+  --color-energy-a: var(--color-moss);
+  --color-energy-b: #8dc63f;
+  --color-energy-c: #c7dc34;
+  --color-energy-d: #fff200;
+  --color-energy-e: #fdb913;
+  --color-energy-f: #f37021;
+  --color-energy-g: #f0453a;
+
+  /* Tipografía */
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --font-sans: "Space Grotesk Variable", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+
+  /* Radios */
+  --radius-photo: 2.5rem;
+  --radius-card: 1.25rem;
+
+  /* Sombras */
+  --shadow-label: 0 18px 40px -18px rgb(26 26 26 / 0.45);
+  --shadow-bar: 0 -8px 24px -12px rgb(26 26 26 / 0.35);
+  --shadow-card: 0 12px 32px -20px rgb(31 74 51 / 0.45);
+
+  /* Movimiento */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+@layer base {
+  :root {
+    /* Máscara de la viñeta (solo canal alfa; el color sale de bg-leaf) */
+    --mask-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E");
+  }
 
-html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
 
-body {
-  background: #ffffff;
-  color: var(--text-dark);
-  font-family: 'Space Grotesk', sans-serif;
-  line-height: 1.5;
-  overflow-x: hidden;
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-moss);
+    color: var(--color-ink);
+  }
 }
 
-::selection { background: var(--copper); color: var(--parchment); }
-
-a { color: inherit; }
-
-/* ─── UTILITY ─────────────────────────────────── */
-
-.eyebrow {
-  font-family: 'Space Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--soil);
-  font-weight: 600;
+/* ------------------------------------------------------------------
+   Utilidades con nombre
+   ------------------------------------------------------------------ */
+@utility focus-ring-light {
+  &:focus-visible {
+    outline: 2px solid var(--color-paper);
+    outline-offset: 3px;
+  }
 }
 
-.wrap {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 32px;
+/* Secciones oscuras: el foco pasa a blanco para seguir viéndose sobre bosque */
+@utility focus-scope-light {
+  & :focus-visible {
+    outline-color: var(--color-paper);
+  }
 }
 
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(45, 95, 63, 0.15), transparent);
-}
-
-/* ─── BACKGROUND TEXTURE ──────────────────────── */
-
-.contours {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.08;
-  background-image:
-    radial-gradient(circle at 18% 20%, transparent 0 140px, rgba(92, 184, 92, 0.08) 141px 142px, transparent 143px),
-    radial-gradient(circle at 18% 20%, transparent 0 220px, rgba(92, 184, 92, 0.08) 221px 222px, transparent 223px),
-    radial-gradient(circle at 18% 20%, transparent 0 300px, rgba(92, 184, 92, 0.08) 301px 302px, transparent 303px),
-    radial-gradient(circle at 88% 78%, transparent 0 180px, rgba(184, 134, 11, 0.06) 181px 182px, transparent 183px),
-    radial-gradient(circle at 88% 78%, transparent 0 260px, rgba(184, 134, 11, 0.06) 261px 262px, transparent 263px);
-}
-
-/* ─── HEADER ──────────────────────────────────── */
-
-header {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 36px;
-  animation: slideInDown 0.8s ease-out;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.05;
-}
-
-.brand-name {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-weight: 500;
-  font-size: 22px;
-  color: var(--soil);
-  letter-spacing: 0.01em;
-}
-
-.brand-sub {
-  font-family: 'Space Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--sand-dim);
-  margin-top: 2px;
-}
-
-/* ─── BUTTONS ─────────────────────────────────── */
-
-.btn {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--parchment);
-  background: var(--soil);
-  border: none;
-  padding: 13px 24px;
-  border-radius: 999px;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.btn:hover { background: var(--soil-3); transform: translateY(-1px); }
-
-.btn-ghost {
-  background: transparent;
-  color: var(--soil);
-  border: 2px solid var(--soil);
-}
-
-.btn-ghost:hover { background: var(--soil); color: var(--parchment); }
-
-/* ─── HERO ────────────────────────────────────── */
-
-main { position: relative; z-index: 1; }
-
-.hero {
-  padding: 96px 0 60px;
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 56px;
-  align-items: center;
-}
-
-.hero > div:first-child { animation: slideInLeft 0.8s ease-out; }
-.hero > div:last-child  { animation: slideInRight 0.8s ease-out; }
-
-.hero h1 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: clamp(40px, 5.2vw, 68px);
-  line-height: 1.05;
-  letter-spacing: -0.01em;
-  margin: 20px 0 26px;
-  color: var(--text-dark);
-}
-
-.hero h1 em {
-  font-style: italic;
-  color: var(--soil);
-}
-
-.hero p.lede {
-  font-size: 18px;
-  color: var(--sand-dim);
-  max-width: 52ch;
-  margin-bottom: 34px;
-}
-
-.hero-cta {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-/* ─── LOGO MARK ───────────────────────────────── */
-
-.mark-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.mark-ring {
+@utility skip-link {
   position: absolute;
-  width: 340px;
-  height: 340px;
-  border-radius: 50%;
-  border: 2px dashed var(--soil);
-  opacity: 0.25;
+  left: 1rem;
+  top: -4rem;
+  z-index: 60;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--color-forest);
+  color: var(--color-paper);
+  &:focus-visible {
+    top: 1rem;
+  }
 }
 
-.mark-glow {
-  position: absolute;
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(92, 184, 92, 0.12), transparent 70%);
+/* Base común de los botones (se combina con btn-primary/forest/ghost) */
+@utility btn {
+  @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 font-medium whitespace-nowrap
+    transition motion-reduce:transition-none active:scale-[0.98];
 }
 
-.ground-mark {
-  width: 220px;
-  height: 220px;
-  position: relative;
-  z-index: 1;
+/* Botón de texto largo que sí puede partirse (CTA de CAE a 360 px): en dos líneas equilibradas */
+@utility btn-wrap {
+  @apply py-2 text-center text-balance whitespace-normal;
 }
 
-.ground-mark .sprout { stroke: var(--moss); }
-.ground-mark .stem   { stroke: var(--soil); }
-.ground-mark .bar    { stroke: var(--copper-bright); }
-
-.ground-mark path,
-.ground-mark line {
-  fill: none;
-  stroke-width: 4.5;
-  stroke-linecap: round;
+/* Título de bloque (h3): servicios, pasos, argumentos y condiciones CAE */
+@utility block-title {
+  @apply font-display text-xl font-semibold text-forest;
 }
 
-/* ─── ANIMATIONS ──────────────────────────────── */
-
-.bar1 { transform-origin: center; animation: pulse 2.8s ease-in-out infinite; }
-.bar2 { transform-origin: center; animation: pulse 2.8s ease-in-out infinite; animation-delay: 0.18s; }
-.bar3 { transform-origin: center; animation: pulse 2.8s ease-in-out infinite; animation-delay: 0.36s; }
-
-@keyframes pulse {
-  0%, 100% { opacity: 0.7; transform: scaleX(1); }
-  50%       { opacity: 1;   transform: scaleX(1.06); }
+/* Contenido que aparece al hacer scroll: solo si hay JS y movimiento.
+   main.ts escalona los hermanos con --stagger. */
+@utility reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.js) & {
+      opacity: 0;
+      translate: 0 1.25rem;
+      transition:
+        opacity 0.7s var(--ease-soft),
+        translate 0.7s var(--ease-soft);
+      transition-delay: calc(var(--stagger, 0) * 110ms);
+    }
+    :where(.js) &.is-visible {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
 }
 
-.ping {
-  transform-origin: 60px 96px;
-  animation: ping 2.8s ease-out infinite;
+/* Zoom suave de la foto al pasar por la tarjeta (grupo) */
+@utility photo-zoom {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: scale 0.7s var(--ease-soft);
+    @media (hover: hover) {
+      :where(.group):hover & {
+        scale: 1.05;
+      }
+    }
+    :where(.group):active &,
+    :where(.group):focus-within & {
+      scale: 1.05;
+    }
+  }
 }
 
-@keyframes ping {
-  0%   { opacity: 0.6; transform: scale(0.3); }
-  70%  { opacity: 0;   transform: scale(2.4); }
-  100% { opacity: 0;   transform: scale(2.4); }
+/* Logo-brote que se dibuja al cargar: barras → tallo → hojas */
+@utility logo-draw {
+  @media (prefers-reduced-motion: no-preference) {
+    & :is(path, line) {
+      stroke-dasharray: 1;
+      animation: draw 0.5s var(--ease-soft) both;
+      animation-delay: var(--d, 0s);
+    }
+  }
 }
 
-@keyframes slideInDown {
-  from { opacity: 0; transform: translateY(-30px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ------------------------------------------------------------------
+   Componentes repetidos (clases que comparten varios componentes Astro o que añade el JS)
+   ------------------------------------------------------------------ */
+@layer components {
+  /* Icono del sprite: hereda color y trazo (componente para que size-* lo pueda ajustar) */
+  .icon {
+    @apply size-6 shrink-0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply font-mono text-sm tracking-wide text-leaf;
+  }
+
+  .section-title {
+    @apply font-display text-3xl leading-tight font-semibold text-balance text-forest sm:text-4xl;
+  }
+
+  .section-lead {
+    @apply mt-4 text-lg text-ink-soft;
+  }
+
+  .btn-primary {
+    @apply btn bg-copper text-ink hover:bg-copper-bright focus-visible:bg-copper-bright active:bg-copper-bright;
+  }
+
+  .btn-forest {
+    @apply btn bg-forest text-paper hover:bg-forest-deep focus-visible:bg-forest-deep active:bg-forest-deep;
+  }
+
+  .btn-ghost {
+    @apply btn border border-forest/40 text-forest hover:border-forest hover:bg-forest/5
+      focus-visible:bg-forest/5 active:bg-forest/10;
+  }
+
+  /* Botón secundario sobre fondo oscuro */
+  .btn-outline-light {
+    @apply btn border border-paper/60 text-paper hover:border-paper hover:bg-paper/10 focus-visible:bg-paper/10
+      active:bg-paper/15;
+  }
+
+  .nav-link {
+    @apply inline-flex min-h-11 items-center whitespace-nowrap text-ink-soft transition-colors hover:text-forest
+      focus-visible:text-forest active:text-forest;
+  }
+
+  .text-link {
+    @apply font-medium text-forest underline decoration-copper decoration-2 underline-offset-4
+      hover:decoration-forest focus-visible:decoration-forest;
+  }
+
+  .link-light {
+    @apply font-medium text-paper underline decoration-copper-bright decoration-2 underline-offset-4
+      focus-ring-light hover:decoration-paper focus-visible:decoration-paper;
+  }
+
+  /* Viñetas con check verde */
+  .check-list {
+    @apply grid gap-2.5 text-ink-soft;
+  }
+
+  .check-list > li {
+    @apply relative pl-7;
+  }
+
+  .check-list > li::before {
+    @apply absolute top-[0.15em] left-0 size-5 bg-leaf content-[''];
+    mask: var(--mask-check) center / contain no-repeat;
+  }
+
+  /* Lista con un icono distinto por ítem (garantías del hero) */
+  .icon-list {
+    @apply grid gap-x-6 gap-y-3 text-sm text-ink-soft;
+  }
+
+  .icon-list > li {
+    @apply flex items-center gap-3;
+  }
+
+  .icon-list .icon {
+    @apply size-5 text-leaf;
+  }
+
+  /* Icono en pastilla verde (servicios, argumentos, condiciones CAE) */
+  .icon-badge {
+    @apply grid size-12 shrink-0 place-items-center rounded-2xl bg-forest text-paper;
+  }
+
+  /* Menú: panel desplegable hasta lg (móvil y tablet), fila en escritorio */
+  .menu-panel {
+    @apply items-center gap-8 lg:flex
+      max-lg:absolute max-lg:inset-x-0 max-lg:top-full max-lg:border-b max-lg:border-ink/10 max-lg:bg-paper max-lg:p-4;
+  }
+
+  .menu-panel[data-open="false"] {
+    @apply max-lg:hidden;
+  }
+
+  /* Botón hamburguesa (lleva .group en el HTML para que los trazos lean aria-expanded) */
+  .menu-toggle {
+    @apply grid size-11 place-items-center rounded-full text-forest hover:bg-forest/10 focus-visible:bg-forest/10
+      active:bg-forest/10 lg:hidden;
+  }
+
+  .menu-icon-bars,
+  .menu-icon-close {
+    @apply origin-center transition duration-200 motion-reduce:transition-none;
+    transform-box: fill-box;
+  }
+
+  .menu-icon-bars {
+    @apply group-aria-expanded:scale-50 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0;
+  }
+
+  .menu-icon-close {
+    @apply scale-50 -rotate-90 opacity-0 group-aria-expanded:scale-100 group-aria-expanded:rotate-0
+      group-aria-expanded:opacity-100;
+  }
+
+  /* Marco de foto que recorta el zoom */
+  .photo-frame {
+    @apply isolate overflow-hidden;
+  }
+
+  /* Servicios: una columna en móvil, tarjeta horizontal en tablet y 3 columnas desde lg.
+     En lg cada tarjeta es un subgrid de 5 filas (foto, icono, título, entradilla, viñetas)
+     para que las listas de las tres arranquen a la misma altura. */
+  .service-grid {
+    @apply grid gap-8 lg:grid-cols-3 lg:grid-rows-[repeat(5,auto)] lg:gap-y-0;
+  }
+
+  .service-card {
+    @apply flex flex-col overflow-hidden rounded-card bg-paper shadow-card
+      md:max-lg:grid md:max-lg:grid-cols-[2fr_3fr] lg:row-span-5 lg:grid lg:grid-rows-subgrid;
+  }
+
+  .service-img {
+    @apply aspect-10/7 w-full object-cover photo-zoom md:max-lg:h-full;
+  }
+
+  .service-body {
+    @apply relative px-6 pb-7 lg:row-span-4 lg:grid lg:grid-rows-subgrid;
+  }
+
+  .service-body > .icon-badge {
+    @apply -mt-6 ring-4 ring-paper md:max-lg:mt-7;
+  }
+
+  .service-title {
+    @apply mt-4 font-display text-2xl font-semibold text-forest;
+  }
+
+  .service-lead {
+    @apply mt-1.5 text-ink-soft;
+  }
+
+  /* Subrayado dibujado bajo «con chispa» */
+  .spark-word {
+    @apply relative inline-block font-normal whitespace-nowrap text-leaf;
+  }
+
+  .spark-underline {
+    @apply pointer-events-none absolute -bottom-2 left-0 h-3 w-full overflow-visible;
+    fill: none;
+    stroke: var(--color-copper);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+
+  /* Pasos: lista vertical en móvil, fila en escritorio, unidos por una línea */
+  .steps {
+    @apply relative mt-12 grid gap-10 lg:grid-cols-4 lg:grid-rows-[repeat(4,auto)] lg:gap-x-8 lg:gap-y-0;
+  }
+
+  .steps::before {
+    @apply absolute top-7 bottom-7 left-[calc(1.75rem-1px)] w-0.5 origin-top bg-leaf content-['']
+      lg:top-[calc(1.75rem-1px)] lg:right-[calc((100%-6rem)/4-1.75rem)] lg:bottom-auto lg:left-7 lg:h-0.5 lg:w-auto lg:origin-left;
+  }
+
+  /* Móvil: icono | texto. Escritorio: subgrid de 4 filas (icono, número, título, texto)
+     compartidas con los otros pasos; .step-body se disuelve con contents. */
+  .step {
+    @apply grid grid-cols-[3.5rem_1fr] content-start gap-x-5
+      lg:row-span-4 lg:grid-cols-1 lg:grid-rows-subgrid lg:gap-y-0;
+  }
+
+  .step-body {
+    @apply lg:contents;
+  }
+
+  /* En móvil, tapa la línea por debajo del último icono */
+  .step:last-child::after {
+    @apply absolute top-14 -bottom-2 left-0 w-14 bg-paper content-[''] lg:hidden;
+  }
+
+  .step:last-child {
+    @apply relative;
+  }
+
+  .step-icon {
+    @apply relative z-10 grid size-14 place-items-center rounded-full bg-forest text-paper ring-8 ring-paper;
+  }
+
+  .step-num {
+    @apply font-mono text-sm font-bold text-copper-deep lg:mt-5;
+  }
+
+  .step-title {
+    @apply mt-1 block-title;
+  }
+
+  .step-text {
+    @apply mt-1.5 text-ink-soft;
+  }
+
+  /* Argumentos y condiciones: icono + texto */
+  .feature {
+    @apply flex gap-4;
+  }
+
+  .feature-title {
+    @apply block-title;
+  }
+
+  .feature-text {
+    @apply mt-1 text-ink-soft;
+  }
+
+  /* FAQ */
+  .faq {
+    @apply border-b border-ink/15;
+  }
+
+  .faq-q {
+    @apply flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-medium
+      text-ink transition-colors hover:text-forest focus-visible:text-forest active:text-forest
+      [&::-webkit-details-marker]:hidden;
+  }
+
+  .faq-q::after {
+    @apply shrink-0 font-mono text-2xl leading-none text-copper-deep content-['+'] transition-transform
+      group-open:rotate-45 motion-reduce:transition-none;
+  }
+
+  .faq-a {
+    @apply max-w-prose pb-6 leading-relaxed text-ink-soft;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-paper;
+  }
+
+  .field {
+    @apply block min-h-12 w-full px-4 py-3 text-ink bg-paper rounded-xl border-2 border-transparent
+      placeholder:text-ink-soft focus-visible:border-copper aria-invalid:border-danger;
+  }
+
+  .checkbox {
+    @apply mt-0.5 size-6 shrink-0 accent-copper aria-invalid:outline-2 aria-invalid:outline-offset-2
+      aria-invalid:outline-danger;
+  }
+
+  /* Mensaje de error por campo: vacío no ocupa sitio */
+  .field-error {
+    @apply mt-2 flex items-start gap-2 text-sm font-medium text-danger empty:hidden;
+  }
+
+  .field-error::before {
+    @apply mt-0.5 grid size-4 shrink-0 place-items-center rounded-full bg-danger font-mono text-xs leading-none
+      font-bold text-forest content-['!'];
+  }
 }
 
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to   { opacity: 1; transform: translateX(0); }
+/* ------------------------------------------------------------------
+   Diagrama CAE: actuación → kWh ahorrados → CAE → ingreso
+   ------------------------------------------------------------------ */
+@layer components {
+  .cae-panel {
+    @apply rounded-photo bg-forest p-6 text-paper sm:p-10;
+  }
+
+  /* En lg cada nodo es un subgrid de 3 filas (icono, etiqueta, pista): las etiquetas
+     arrancan a la misma altura aunque una ocupe dos líneas. */
+  .cae-flow {
+    @apply grid gap-6 lg:grid-cols-4 lg:grid-rows-[repeat(3,auto)] lg:gap-y-0;
+    --line-from: 1 0;
+    --spark-to: 0 100%;
+  }
+
+  .cae-node {
+    @apply relative grid grid-cols-[4rem_1fr] content-start items-start gap-x-4
+      lg:row-span-3 lg:grid-cols-1 lg:grid-rows-subgrid lg:justify-items-center lg:text-center;
+  }
+
+  .cae-text {
+    @apply lg:contents;
+  }
+
+  .cae-icon {
+    @apply relative z-10 grid size-16 place-items-center rounded-full border-2 border-moss bg-forest-deep text-moss;
+  }
+
+  .cae-node:last-child .cae-icon {
+    @apply border-copper-light text-copper-light;
+  }
+
+  .cae-label {
+    @apply block pt-2 text-lg font-semibold lg:pt-4;
+  }
+
+  .cae-hint {
+    @apply mt-0.5 block text-sm text-paper/80;
+  }
+
+  /* Conector entre nodos: vertical en móvil, horizontal en escritorio */
+  .cae-link {
+    @apply absolute top-[4.25rem] -bottom-5 left-[calc(2rem-0.375rem)] w-3
+      lg:top-[calc(2rem-0.375rem)] lg:right-[calc(-50%+0.75rem)] lg:bottom-auto lg:left-[calc(50%+2.25rem)] lg:h-3 lg:w-auto;
+  }
+
+  .cae-link::before {
+    @apply absolute inset-y-0 left-[calc(50%-1px)] w-0.5 origin-top bg-moss content-['']
+      lg:inset-x-0 lg:top-[calc(50%-1px)] lg:bottom-auto lg:left-0 lg:h-0.5 lg:w-auto lg:origin-left;
+  }
+
+  /* Chispa que recorre el conector una vez */
+  .cae-link::after {
+    @apply absolute inset-0 opacity-0 content-[''];
+    background: radial-gradient(circle, var(--color-copper-light) 0 0.3rem, transparent 0.35rem) top center / 0.75rem
+      0.75rem no-repeat;
+  }
+
+  @media (width >= 64rem) {
+    .cae-flow {
+      --line-from: 0 1;
+      --spark-to: 100% 0;
+    }
+
+    .cae-link::after {
+      background-position: left center;
+    }
+  }
+
+  .cae-node:nth-child(2) {
+    --i: 1;
+  }
+  .cae-node:nth-child(3) {
+    --i: 2;
+  }
+  .cae-node:nth-child(4) {
+    --i: 3;
+  }
+
+  /* Secuencia: nodo → línea → chispa → siguiente nodo (cada pieza ≤ 700 ms, una vez) */
+  @media (prefers-reduced-motion: no-preference) {
+    /* Se animan etiqueta y pista (no .cae-text: con display: contents no tiene caja) */
+    :where(.js) .cae-flow :is(.cae-icon, .cae-label, .cae-hint) {
+      opacity: 0;
+    }
+    :where(.js) .cae-link::before {
+      scale: var(--line-from);
+    }
+
+    .cae-flow.is-visible .cae-icon {
+      animation: pop 0.5s var(--ease-soft) both;
+      animation-delay: calc(var(--i, 0) * 650ms);
+    }
+    .cae-flow.is-visible :is(.cae-label, .cae-hint) {
+      animation: rise 0.5s var(--ease-soft) both;
+      animation-delay: calc(var(--i, 0) * 650ms + 100ms);
+    }
+    .cae-flow.is-visible .cae-link::before {
+      animation: grow-line 0.45s var(--ease-soft) both;
+      animation-delay: calc(var(--i, 0) * 650ms + 300ms);
+    }
+    .cae-flow.is-visible .cae-link::after {
+      animation: spark 0.6s ease-in-out both;
+      animation-delay: calc(var(--i, 0) * 650ms + 250ms);
+    }
+  }
+
+  /* Pasos: la línea se dibuja al entrar en pantalla */
+  .steps {
+    --line-from: 1 0;
+  }
+
+  @media (width >= 64rem) {
+    .steps {
+      --line-from: 0 1;
+    }
+  }
+
+  .step:nth-child(2) {
+    --i: 1;
+  }
+  .step:nth-child(3) {
+    --i: 2;
+  }
+  .step:nth-child(4) {
+    --i: 3;
+  }
+
+  /* Secuencia: los iconos aparecen en su sitio (escala + opacidad, sin moverse en Y),
+     la línea pasa por detrás después y solo el texto sube un poco. */
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.js) .steps :is(.step-icon, .step-num, .step-title, .step-text) {
+      opacity: 0;
+    }
+    .steps.is-visible .step-icon {
+      animation: pop 0.4s var(--ease-soft) both;
+      animation-delay: calc(var(--i, 0) * 100ms);
+    }
+    .steps.is-visible :is(.step-num, .step-title, .step-text) {
+      animation: rise 0.5s var(--ease-soft) both;
+      animation-delay: calc(var(--i, 0) * 100ms + 150ms);
+    }
+
+    :where(.js) .steps::before {
+      scale: var(--line-from);
+      transition: scale 0.6s ease-in-out 0.35s;
+    }
+    :where(.js) .steps.is-visible::before {
+      scale: 1 1;
+    }
+
+    /* Subrayado de «con chispa» */
+    :where(.js) .spark-underline path {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      transition: stroke-dashoffset 0.7s var(--ease-soft) 0.45s;
+    }
+    :where(.js) .is-visible .spark-underline path {
+      stroke-dashoffset: 0;
+    }
+  }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+@keyframes pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .bar1, .bar2, .bar3, .ping { animation: none; }
-  header, .hero > div         { animation: none; }
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 0.5rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
 }
 
-/* ─── BADGE ───────────────────────────────────── */
-
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--soil);
-  border: 2px solid var(--soil);
-  color: var(--parchment);
-  padding: 9px 18px 9px 14px;
-  border-radius: 999px;
-  animation: fadeIn 1.2s ease-out;
+@keyframes grow-line {
+  from {
+    scale: var(--line-from);
+  }
+  to {
+    scale: 1 1;
+  }
 }
 
-.badge .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--moss);
-  box-shadow: 0 0 0 0 rgba(92, 184, 92, 0.6);
-  animation: dotpulse 2s infinite;
+@keyframes spark {
+  0% {
+    opacity: 0;
+    translate: 0 0;
+  }
+  20%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: var(--spark-to);
+  }
 }
 
-@keyframes dotpulse {
-  0%   { box-shadow: 0 0 0 0 rgba(92, 184, 92, 0.5); }
-  70%  { box-shadow: 0 0 0 8px rgba(92, 184, 92, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(92, 184, 92, 0); }
+/* ------------------------------------------------------------------
+   Etiqueta energética A–G (detalle memorable)
+   ------------------------------------------------------------------ */
+@layer components {
+  .energy-bar {
+    --w: 40%;
+    @apply flex h-6 items-center pl-2 font-mono text-sm font-bold text-ink sm:h-7;
+    width: var(--w);
+    clip-path: polygon(0 0, calc(100% - 0.8rem) 0, 100% 50%, calc(100% - 0.8rem) 100%, 0 100%);
+  }
+
+  /* El indicador sube de la fila G (6) a la A (0) */
+  .energy-pointer {
+    --row: 6;
+    --row-h: 1.5rem;
+    --gap: 0.25rem;
+    translate: 0 calc(var(--row) * (var(--row-h) + var(--gap)));
+    transition: translate 0.32s var(--ease-soft);
+  }
+
+  @media (width >= 40rem) {
+    .energy-pointer {
+      --row-h: 1.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .energy-pointer {
+      transition: none;
+    }
+  }
+
+  .energy-pointer.is-done {
+    animation: settle 0.6s var(--ease-soft);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .energy-pointer.is-done {
+      animation: none;
+    }
+  }
 }
 
-/* ─── SECTIONS ────────────────────────────────── */
-
-section { padding: 70px 0; position: relative; }
-
-h2 {
-  font-family: 'Fraunces', serif;
-  font-weight: 500;
-  font-size: clamp(28px, 3.4vw, 42px);
-  color: var(--text-dark);
-  max-width: 16ch;
-  margin-bottom: 18px;
-}
-
-.section-head {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 40px;
-  align-items: end;
-  margin-bottom: 48px;
-  animation: fadeIn 1s ease-out;
-}
-
-.section-head p {
-  color: var(--sand-dim);
-  font-size: 17px;
-  max-width: 48ch;
-}
-
-/* ─── SERVICE CARDS ───────────────────────────── */
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-}
-
-.card {
-  background: var(--parchment);
-  border: 2px solid var(--soil);
-  border-radius: var(--radius);
-  padding: 32px 26px;
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-  animation: fadeIn 0.8s ease-out;
-}
-
-.card:hover {
-  transform: translateY(-6px);
-  border-color: var(--soil-3);
-  box-shadow: 0 12px 24px rgba(45, 95, 63, 0.15);
-}
-
-.card .icon {
-  width: 38px;
-  height: 38px;
-  margin-bottom: 20px;
-  stroke: var(--soil);
-  fill: none;
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.card h3 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 600;
-  font-size: 19px;
-  margin-bottom: 10px;
-  color: var(--soil);
-}
-
-.card p {
-  color: var(--text-dark);
-  font-size: 15px;
-  line-height: 1.55;
-}
-
-/* ─── FUTURE TAGS ─────────────────────────────── */
-
-.future {
-  background: var(--soil);
-  color: var(--parchment);
-  border-radius: 32px;
-  padding: 56px 48px;
-}
-
-.future .section-head p { color: rgba(255, 255, 255, 0.85); }
-.future h2              { color: var(--parchment); }
-.future .eyebrow        { color: var(--copper-bright); }
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.tag {
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 10px 18px;
-  border-radius: 999px;
-  color: var(--parchment);
-}
-
-.tag.on {
-  background: var(--copper-bright);
-  color: var(--soil);
-  border-color: var(--copper-bright);
-  font-weight: 600;
-}
-
-/* ─── FOOTER ──────────────────────────────────── */
-
-footer {
-  padding: 40px 0 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-footer .brand-mini {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 16px;
-  color: var(--soil);
-  font-weight: 500;
-}
-
-footer small {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  color: var(--sand-dim);
-  letter-spacing: 0.04em;
-}
-
-/* ─── RESPONSIVE ──────────────────────────────── */
-
-@media (max-width: 880px) {
-  .hero                 { grid-template-columns: 1fr; padding-top: 56px; }
-  .mark-stage           { order: -1; margin-bottom: 10px; }
-  .mark-ring            { width: 220px; height: 220px; }
-  .mark-glow            { width: 170px; height: 170px; }
-  .ground-mark          { width: 150px; height: 150px; }
-  .section-head         { grid-template-columns: 1fr; }
-  .cards                { grid-template-columns: 1fr; }
-  .future               { padding: 40px 26px; }
-  header                { flex-wrap: wrap; gap: 16px; }
+@keyframes settle {
+  40% {
+    scale: 1.12;
+  }
+  100% {
+    scale: 1;
+  }
 }

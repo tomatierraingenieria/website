@@ -1,0 +1,43 @@
+---
+import Icon from './Icon.astro';
+import type { IconName } from '../data/icons';
+import { whyPhoto } from '../data/images';
+
+const reasons: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'chat', title: 'Hablamos claro', text: 'Qué significa tu etiqueta y qué hacer con ella, sin jerga.' },
+  { icon: 'user', title: 'Un solo técnico', text: 'Quien visita tu casa firma el certificado y te responde.' },
+  { icon: 'rain', title: 'Casa gallega', text: 'Piedra, humedad y clima atlántico, en cada medición.' },
+  { icon: 'leaf', title: 'Más allá del papel', text: 'Te ayudamos a que el ahorro se note en la factura.' },
+];
+---
+<section class="bg-mint py-20 lg:py-28" aria-labelledby="porque-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="group photo-frame reveal rounded-photo">
+      <img
+        class="aspect-4/3 w-full object-cover photo-zoom lg:aspect-4/5"
+        src={whyPhoto.src}
+        width={whyPhoto.width}
+        height={whyPhoto.height}
+        loading="lazy"
+        alt={whyPhoto.alt}
+      />
+    </div>
+    <div>
+      <div class="reveal">
+        <p class="eyebrow">Por qué Tomatierra</p>
+        <h2 id="porque-title" class="section-title mt-3">Ingeniería con los pies en la tierra</h2>
+      </div>
+      <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+        {reasons.map((reason) => (
+          <li class="feature reveal">
+            <span class="icon-badge" aria-hidden="true"><Icon name={reason.icon} /></span>
+            <div>
+              <h3 class="feature-title">{reason.title}</h3>
+              <p class="feature-text">{reason.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+---
+// Acordeón exclusivo con <details name="faq">.
+// TODO: confirmar con el cliente:
+//   - Plazos: ¿fecha de entrega por escrito?
+//   - Qué incluye: ¿tasas de registro incluidas o no?
+//   - Validar las afirmaciones legales (obligatoriedad, excepciones, validez de 10 y 5 años).
+const faqs = [
+  {
+    q: '¿Cuánto se tarda en tener el certificado?',
+    a: 'Depende del tamaño del inmueble y de cuándo podamos hacer la visita. Te indicamos los plazos al pedir presupuesto.',
+  },
+  {
+    q: '¿Es obligatorio para vender o alquilar?',
+    a: 'Sí, en casi todos los casos. Necesitas el certificado energético registrado para vender o alquilar una vivienda o un local, y la etiqueta debe aparecer en los anuncios. Hay excepciones concretas (por ejemplo, edificios aislados de menos de 50 m² o inmuebles que se compran para demolerlos): si dudas, pregúntanos.',
+  },
+  {
+    q: '¿Cuánto tiempo es válido?',
+    a: 'Hasta diez años. Si la calificación es G, cinco. Si haces una reforma que cambie la eficiencia del inmueble, conviene actualizarlo para que refleje la mejora.',
+  },
+  {
+    q: '¿Qué incluye exactamente?',
+    a: 'La visita técnica, el cálculo, el certificado firmado, la etiqueta, el registro oficial y las recomendaciones de mejora. En el presupuesto te detallamos qué incluye y si hay alguna tasa aparte.',
+  },
+  {
+    q: '¿Trabajáis en mi zona?',
+    a: 'Trabajamos en toda Galicia: A Coruña, Lugo, Ourense y Pontevedra. Indica tu municipio en el formulario y lo tenemos en cuenta en el presupuesto.',
+  },
+  {
+    q: '¿Cómo sé si mi proyecto genera CAE?',
+    a: 'Depende del tipo de mejora y del ahorro que consiga. Cuéntanos qué tienes pensado hacer y lo evaluamos antes de que inviertas, para que decidas con los números delante.',
+  },
+];
+---
+<section id="faq" class="bg-mint py-20 lg:py-28" aria-labelledby="faq-title">
+  <div class="container-page grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-16">
+    <div class="reveal">
+      <p class="eyebrow">Preguntas frecuentes</p>
+      <h2 id="faq-title" class="section-title mt-3">Lo que todo el mundo nos pregunta</h2>
+      <p class="mt-4 text-ink-soft">
+        ¿Falta la tuya? Escríbenos a
+        <a class="text-link" href="mailto:hola@tomatierraingenieria.com">hola@tomatierraingenieria.com</a>.
+      </p>
+    </div>
+
+    <div class="reveal border-t border-ink/15">
+      {faqs.map((faq) => (
+        <details class="faq group" name="faq">
+          <summary class="faq-q">{faq.q}</summary>
+          <p class="faq-a">{faq.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

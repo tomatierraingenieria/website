@@ -1,17 +1,32 @@
 ---
+// Fuentes self-hosted (@fontsource) antes que el CSS global, que las usa en @theme.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/opsz-italic.css';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource/space-mono/400.css';
+import '@fontsource/space-mono/700.css';
 import '../styles/global.css';
+import IconSprite from '../components/IconSprite.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  /** og:title y twitter:title; por defecto, `title`. */
+  ogTitle?: string;
+  /** og:description y twitter:description; por defecto, `description`. */
+  ogDescription?: string;
+  /** PNG de 1200×630 en public/. */
   image?: string;
+  imageAlt?: string;
 }
 
 const {
   title = 'Certificados Energéticos y CAE en Galicia | Tomatierra Ingeniería',
-  description =
-    'Tomatierra Ingeniería: especialistas en certificados energéticos y CAE (Certificados de Ahorro Energético) en Galicia. Servicios para viviendas, industria y transporte, incluyendo proyectos de puntos de recarga para vehículos eléctricos.',
+  description = 'Tomatierra Ingeniería: certificados energéticos, auditorías y CAE en Galicia, y proyectos de recarga de vehículo eléctrico. Pide presupuesto sin compromiso.',
+  ogTitle = title,
+  ogDescription = description,
   image = '/og-image.png',
+  imageAlt = 'Tomatierra Ingeniería: certificación energética en Galicia',
 } = Astro.props;
 
 const siteBase = Astro.site ?? 'https://tomatierraingenieria.com';
@@ -50,12 +65,10 @@ const structuredData = {
       name: 'Tomatierra Ingeniería',
       alternateName: 'Tomatierra',
       description:
-        'Ingeniería especializada en certificados energéticos y Certificados de Ahorro Energético (CAE) para viviendas e industria en Galicia. Proyectos de puntos de recarga para vehículos eléctricos y certificación para desclasificación de garajes.',
+        'Ingeniería especializada en certificados energéticos, auditorías y Certificados de Ahorro Energético (CAE) para viviendas e industria en Galicia. Proyectos de puntos de recarga para vehículos eléctricos y desclasificación de garajes.',
       url: 'https://tomatierraingenieria.com',
       email: 'hola@tomatierraingenieria.com',
-      areaServed: [
-        { '@type': 'State', name: 'Galicia', addressCountry: 'ES' },
-      ],
+      areaServed: [{ '@type': 'State', name: 'Galicia', addressCountry: 'ES' }],
       knowsAbout: [
         'Certificados Energéticos',
         'CAE - Certificados de Ahorro Energético',
@@ -75,27 +88,27 @@ const structuredData = {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
-              name: 'Certificado Energético de Vivienda',
+              name: 'Viviendas: certificado energético',
               description:
-                'Certificados energéticos y CAE (Certificados de Ahorro Energético) para viviendas residenciales en Galicia. Auditorías y mejoras de eficiencia.',
+                'Certificado energético para vender o alquilar: visita y toma de datos, certificado y etiqueta registrados y mejoras ordenadas por ahorro.',
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
-              name: 'Auditoría Energética Industrial y CAE',
+              name: 'Industria y CAE',
               description:
-                'Diagnóstico energético y Certificados de Ahorro Energético (CAE) para plantas y procesos industriales. Ahorro real y cumplimiento normativo.',
+                'Auditorías energéticas de instalaciones y procesos, medidas de ahorro justificadas y tramitación de Certificados de Ahorro Energético (CAE).',
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
-              name: 'Instalación Eléctrica para Vehículos Eléctricos',
+              name: 'Movilidad eléctrica',
               description:
-                'Proyectos de instalación eléctrica para recarga de vehículos eléctricos y certificación para la desclasificación de garajes conforme a normativa vigente.',
+                'Proyectos de recarga de vehículo eléctrico en garajes comunitarios, desclasificación de garajes y documentación para comunidad y concello.',
             },
           },
         ],
@@ -109,71 +122,51 @@ const structuredData = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {/* Inline y en el <head>: marca que hay JS antes de pintar, para que .reveal no parpadee */}
+    <script is:inline>document.documentElement.classList.add('js');</script>
 
-    <!-- Primary SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="alternate" hreflang="es" href={canonicalURL} />
     <link rel="alternate" hreflang="x-default" href={canonicalURL} />
 
-    <!-- Crawling -->
-    <meta
-      name="robots"
-      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
-    />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
-    <!-- Language & Location signals -->
     <meta name="language" content="es" />
     <meta name="geo.region" content="ES-GA" />
     <meta name="geo.placename" content="Galicia, España" />
     <meta name="author" content="Tomatierra Ingeniería" />
 
-    <!-- Open Graph (social + AI crawlers) -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={ogTitle} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="Tomatierra Ingeniería" />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={ogTitle} />
+    <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={imageAlt} />
 
-    <!-- Icons & theme -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="theme-color" content="#2D5F3F" />
+    <meta name="theme-color" content="#1f4a33" />
 
-    <!-- Fonts (preconnect first, then non-render-blocking load) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      as="style"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-      onload="this.onload=null;this.rel='stylesheet'"
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-      />
-    </noscript>
-
-    <!-- Structured data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </head>
-  <body>
-    <div class="contours" aria-hidden="true"></div>
-    <div class="wrap">
-      <slot />
-    </div>
+  {/* ontouchstart vacío: activa :active en iOS Safari */}
+  <body class="pb-20 antialiased lg:pb-0" ontouchstart="">
+    <IconSprite />
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+    <script>
+      import '../scripts/main.ts';
+    </script>
   </body>
 </html>

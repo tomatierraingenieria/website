@@ -60,6 +60,50 @@ test.describe('SEO meta tags', () => {
     expect(data['@graph']).toHaveLength(3);
   });
 
+  test('description is a short, conversion-oriented summary', async ({ page }) => {
+    const content = (await page.locator('meta[name="description"]').getAttribute('content')) ?? '';
+    expect(content.length).toBeLessThanOrEqual(160);
+    expect(content).toContain('CAE');
+    expect(content).toContain('Galicia');
+    expect(content).toMatch(/Pide presupuesto/);
+  });
+
+  test('og:image:alt is declared', async ({ page }) => {
+    await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /\S{3,}/);
+  });
+
+  test('theme-color is the forest green', async ({ page }) => {
+    await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#1f4a33');
+  });
+
+  test('favicon is the SVG and no broken apple-touch-icon is linked', async ({ page }) => {
+    const icon = page.locator('link[rel="icon"]');
+    await expect(icon).toHaveAttribute('href', '/favicon.svg');
+    expect((await page.request.get('/favicon.svg')).status()).toBe(200);
+    await expect(page.locator('link[rel="apple-touch-icon"]')).toHaveCount(0);
+  });
+
+  test('og-image.png is served', async ({ page }) => {
+    const response = await page.request.get('/og-image.png');
+    expect(response.status()).toBe(200);
+    expect(response.headers()['content-type']).toContain('image/png');
+  });
+
+  test('no third-party font requests and no HTML comments in production', async ({ page }) => {
+    const html = await (await page.request.get('/')).text();
+    expect(html).not.toContain('fonts.googleapis.com');
+    expect(html).not.toContain('<!--');
+  });
+
+  test('JSON-LD services match the three verticals', async ({ page }) => {
+    const data = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);
+    const service = data['@graph'].find((n: { '@type': string }) => n['@type'] === 'ProfessionalService');
+    const names = service.hasOfferCatalog.itemListElement.map(
+      (offer: { itemOffered: { name: string } }) => offer.itemOffered.name,
+    );
+    expect(names).toEqual(['Viviendas: certificado energético', 'Industria y CAE', 'Movilidad eléctrica']);
+  });
+
   test('JSON-LD contains Organization with contact email', async ({ page }) => {
     const scriptContent = await page.locator('script[type="application/ld+json"]').textContent();
     const data = JSON.parse(scriptContent!);
